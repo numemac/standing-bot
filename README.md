@@ -39,7 +39,8 @@ The prompt is designed to promote the framework through accurate, useful applica
 - identify whether the post asks for a connection, distinction, implication, objection, evaluation, explanation, or practical direction;
 - explain the requested kind of relationship directly, placing positive relevance before formal non-entailment and analyzing each direction separately when needed;
 - introduce the linked full name of the framework naturally, disclose that it is a contestable lens, and explain why it is relevant to this case;
-- use the smallest relevant set of corpus concepts and remove sentences that merely display corpus coverage or introduce adjacent causes and domains;
+- center the single framework application that best answers the post, adding dependencies or other concepts only when they support a distinct necessary conclusion;
+- remove sentences that merely display corpus coverage, repeat the opening, or introduce adjacent causes and domains;
 - make important premises and inferential bridges explicit, including what survives when a connecting premise is rejected;
 - separate contradiction from tension, shared outcomes from shared justification, and personal choice from relationships, institutions, public policy, and enforcement;
 - identify a claim's holder, addressee, relational ground, and scope before describing something as owed;
@@ -50,7 +51,7 @@ The prompt is designed to promote the framework through accurate, useful applica
 - link materially used concepts to canonical `https://nume.ca/wiki/...` pages without inventing pages; and
 - prioritize a brief, compassionate safety response over framework promotion if a post indicates imminent self-harm, suicide, or danger to others.
 
-Replies are self-contained, Reddit-compatible Markdown. Depth follows the complexity of the reasoning rather than the length of the post, with a prompt limit of 9,500 characters to leave room below Reddit's 10,000-character comment limit.
+Replies are self-contained, Reddit-compatible Markdown. An ordinary focused answer targets roughly 200–400 words, although shorter answers are welcome and genuinely complex or multipart posts may justify more. The hard prompt limit remains 9,500 characters to leave room below Reddit's 10,000-character comment limit.
 
 ## Moderation model and limitations
 
@@ -108,7 +109,7 @@ Open a post's moderator menu, choose **Apply Standing Framework**, and select **
 
 ## OpenAI and data handling
 
-The app uses the installed `openai` Node package and the Responses API. It creates responses with background processing enabled, standard reasoning mode, high reasoning effort, high text verbosity, the default service tier, and a 12,000-token maximum output budget. The character limit is checked before Reddit publication even though the token budget is higher.
+The app uses the installed `openai` Node package and the Responses API. It creates responses with background processing enabled, standard reasoning mode, high reasoning effort, medium text verbosity, the default service tier, and a 12,000-token maximum output budget. The character limit is checked before Reddit publication even though the token budget is higher.
 
 For each invocation, the following are transmitted to OpenAI:
 
