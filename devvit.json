@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developers.reddit.com/schema/config-file.v1.json",
+  "name": "standing-bot",
+  "server": {
+    "dir": "dist/server",
+    "entry": "index.cjs"
+  },
+  "menu": {
+    "items": [
+      {
+        "label": "Apply Standing Framework",
+        "description": "Powered by AI",
+        "location": "post",
+        "forUserType": "moderator",
+        "endpoint": "/internal/menu/apply-standing-framework"
+      }
+    ]
+  },
+  "forms": {
+    "applyStandingFramework": "/internal/form/apply-standing-framework"
+  },
+  "scheduler": {
+    "tasks": {
+      "pollStandingReply": {
+        "endpoint": "/internal/task/poll-standing-reply"
+      }
+    }
+  },
+  "settings": {
+    "subreddit": {
+      "openaiApiKey": {
+        "type": "string",
+        "label": "OpenAI API Key",
+        "defaultValue": ""
+      },
+      "openaiModel": {
+        "type": "string",
+        "label": "OpenAI model",
+        "defaultValue": "gpt-5.6"
+      }
+    }
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  },
+  "permissions": {
+    "reddit": true,
+    "redis": true,
+    "http": {
+      "enable": true,
+      "domains": [
+        "api.openai.com"
+      ]
+    }
+  },
+  "dev": {
+    "subreddit": "standing_bot_dev"
+  }
+}
