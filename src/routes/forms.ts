@@ -19,18 +19,36 @@ forms.post('/apply-standing-framework', async (c) => {
 
   const postId = formValues.postId || context.postId;
   if (!isPostId(postId)) {
-    return c.json<UiResponse>({ showToast: 'Could not identify the selected post.' }, 200);
+    return c.json<UiResponse>(
+      { showToast: 'Could not identify the selected post.' },
+      200
+    );
   }
 
   try {
-    console.info('[standing-framework] Moderator requested a framework reply.', { postId });
+    console.info(
+      '[standing-framework] Moderator requested a framework reply.',
+      { postId }
+    );
 
-    const post = await reddit.getPostById(postId);
-    console.info('[standing-framework] Selected post loaded; creating background response.', {
-      postId,
+    const [post, subreddit] = await Promise.all([
+      reddit.getPostById(postId),
+      reddit.getCurrentSubreddit(),
+    ]);
+    const communityDescription = subreddit.description?.trim();
+    console.info(
+      '[standing-framework] Selected post loaded; creating background response.',
+      {
+        postId,
+        hasCommunityDescription: Boolean(communityDescription),
+      }
+    );
+
+    const queued = await queueStandingReply({
+      title: post.title,
+      body: post.body ?? '',
+      ...(communityDescription ? { communityDescription } : {}),
     });
-
-    const queued = await queueStandingReply({ title: post.title, body: post.body ?? '' });
     console.info('[standing-framework] OpenAI background response created.', {
       responseId: queued.responseId,
       postId,
@@ -77,7 +95,10 @@ forms.post('/apply-standing-framework', async (c) => {
   } catch (error) {
     console.error('Could not apply the Standing Framework.', error);
     return c.json<UiResponse>(
-      { showToast: 'Could not queue the Standing Framework reply. Please try again.' },
+      {
+        showToast:
+          'Could not queue the Standing Framework reply. Please try again.',
+      },
       200
     );
   }
