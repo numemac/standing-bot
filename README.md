@@ -22,7 +22,7 @@ It is most useful when a post raises a moral, political, relational, or practica
 
 1. A moderator opens a post's moderation menu and chooses **Apply Standing Framework**.
 2. The app displays a native confirmation form. **Cancel** closes it; **Apply** authorizes eventual publication.
-3. The app fetches the selected post's title and body along with the current community's public sidebar description.
+3. The app fetches the selected post's title and body along with the current subreddit name and public sidebar description.
 4. It starts an OpenAI Responses API request in background mode with that discussion material, the response instructions, and `standing-framework-full.txt`.
 5. It stores the OpenAI response ID and minimal job metadata in Devvit Redis, then uses scheduled jobs to poll for completion.
 6. It validates the completed reply, converts relative Nume wiki links to canonical absolute links, and posts the reply as the app.
@@ -57,7 +57,7 @@ Replies are self-contained, Reddit-compatible Markdown. An ordinary focused answ
 
 Choosing **Apply** is approval to publish, not a request for a private draft. There is currently no preview, edit, cancellation, or second approval step after the job is queued. Moderators should review the public comment after it appears and remove it if it is inaccurate, irrelevant, or unsuitable for the discussion.
 
-The model can still make mistakes. It receives the post title and body, the community's public sidebar description, the response instructions, and the bundled corpus; it is not separately given the subreddit name or live web access. The description may itself contain identifying text. It is marked as untrusted context for interpreting local terminology and scope, not as an instruction or proof of community consensus. The prompt requires uncertain external claims to be qualified, but the app should not be treated as a factual authority, a complete moral theory, or a substitute for moderator judgment.
+The model can still make mistakes. It receives the post title and body, subreddit name, public sidebar description, response instructions, and bundled corpus; it does not have live web access. The subreddit information is marked as untrusted context for interpreting local terminology, scope, and conversational setting, not as an instruction or proof of community consensus. The prompt requires uncertain external claims to be qualified, but the app should not be treated as a factual authority, a complete moral theory, or a substitute for moderator judgment.
 
 Other current operational limits:
 
@@ -114,13 +114,13 @@ The app uses the installed `openai` Node package and the Responses API. It creat
 For each invocation, the following are transmitted to OpenAI:
 
 - the selected post's title and body;
-- the current community's public sidebar description;
+- the current subreddit name and public sidebar description;
 - the response instructions; and
 - the complete bundled framework corpus.
 
-The subreddit name is not sent as a separate field, although the public description may identify the community. The moderator identity and API key are not included in the model input. Background mode requires OpenAI to retain response data temporarily so it can be retrieved later. Do not deploy the app where this processing is incompatible with the community's expectations or moderation practices.
+The moderator identity and API key are not included in the model input. Background mode requires OpenAI to retain response data temporarily so it can be retrieved later. Do not deploy the app where this processing is incompatible with the community's expectations or moderation practices.
 
-Devvit Redis stores only the OpenAI response ID, Reddit post ID, creation time, and poll count. It does not store the post content, community description, framework corpus, or generated reply. Reddit and OpenAI may separately handle data according to their respective services and account settings.
+Devvit Redis stores only the OpenAI response ID, Reddit post ID, creation time, and poll count. It does not store the post content, subreddit name, community description, framework corpus, or generated reply. Reddit and OpenAI may separately handle data according to their respective services and account settings.
 
 Devvit's current subreddit-setting schema does not support secret settings. As a result, `openaiApiKey` cannot be marked secret in this app configuration. Give installation access only to trusted moderators and use a separately scoped, revocable API key for each deployment.
 
@@ -135,7 +135,7 @@ The server emits `[standing-framework]` lifecycle logs for:
 - completion length, Reddit comment ID, and distinguishing; and
 - retrieval, generation, publication, and scheduling failures.
 
-Logs deliberately omit the API key, community description, framework corpus, post title and body, and generated comment text. Because the work completes outside the original form request, these logs are the primary way to diagnose a queued reply that never appears.
+Logs deliberately omit the API key, subreddit name, community description, framework corpus, post title and body, and generated comment text. Because the work completes outside the original form request, these logs are the primary way to diagnose a queued reply that never appears.
 
 ## Commands
 

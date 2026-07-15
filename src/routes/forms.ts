@@ -47,6 +47,7 @@ forms.post('/apply-standing-framework', async (c) => {
     const queued = await queueStandingReply({
       title: post.title,
       body: post.body ?? '',
+      subredditName: subreddit.name,
       ...(communityDescription ? { communityDescription } : {}),
     });
     console.info('[standing-framework] OpenAI background response created.', {
