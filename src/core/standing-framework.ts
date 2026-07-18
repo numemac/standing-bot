@@ -100,7 +100,7 @@ export type StandingReplyResult =
 
 function absolutizeNumeWikiLinks(markdown: string): string {
   return markdown.replace(
-    /\]\((\/wiki\/[A-Za-z0-9-]+)\)/g,
+    /\]\((\/wiki\/[A-Za-z0-9-]+(?:#[A-Za-z0-9-]+)?)\)/g,
     (_match, path: string) => `](${NUME_ORIGIN}${path})`
   );
 }
