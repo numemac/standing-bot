@@ -22,7 +22,7 @@
   "dependencies": {
     "@devvit/start": "0.13.8",
     "@devvit/web": "0.13.8",
-    "@hono/node-server": "^2.0.3",
+    "@hono/node-server": "^2.0.10",
     "devvit": "0.13.8",
     "hono": "4.12.28",
     "openai": "^6.47.0"
